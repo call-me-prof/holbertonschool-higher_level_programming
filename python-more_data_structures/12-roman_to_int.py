@@ -18,4 +18,3 @@ def roman_to_int(roman_string):
         
     return total
 EOF
-chmod +x 12-roman_to_int.py
