@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Module for printing a square using '#'."""
+"""Module for print_square method."""
 
 
 def print_square(size):
@@ -9,9 +9,11 @@ def print_square(size):
         size: The size length of the square.
 
     Raises:
-        TypeError: If size is not an integer or is a float less than 0.
+        TypeError: If size is not an integer.
         ValueError: If size is less than 0.
     """
+    if isinstance(size, float) and size < 0:
+        raise TypeError("size must be an integer")
     if not isinstance(size, int):
         raise TypeError("size must be an integer")
     if size < 0:
