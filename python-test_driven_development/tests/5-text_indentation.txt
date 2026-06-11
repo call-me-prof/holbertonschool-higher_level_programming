@@ -1,0 +1,17 @@
+The ``5-text_indentation`` module
+==================================
+
+Using ``text_indentation``
+--------------------------
+
+Import the function:
+    >>> text_indentation = __import__('5-text_indentation').text_indentation
+
+Test normal behavior:
+    >>> text_indentation("Hello. World? Python:")
+    Hello.
+    <BLANKLINE>
+    World?
+    <BLANKLINE>
+    Python:
+    <BLANKLINE>
