@@ -1,11 +1,12 @@
-The ``1-matrix_divided`` module
+The ``2-matrix_divided`` module
 ===============================
 
 Using ``matrix_divided``
 ------------------------
 
 Import the function:
-    >>> matrix_divided = __import__('1-matrix_divided').matrix_divided
+    >>> matrix_divided = __import__('2-matrix_divided').matrix_divided
+
 
 Test normal behavior:
     >>> matrix = [[1, 2, 3], [4, 5, 6]]
