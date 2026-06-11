@@ -7,18 +7,51 @@ Using ``add_integer``
 Import the function:
     >>> add_integer = __import__('0-add_integer').add_integer
 
-Test normal behavior:
+Test normal behavior with integers:
     >>> add_integer(1, 2)
     3
-
     >>> add_integer(100, -2)
     98
 
-Test float casting:
+Test normal behavior with floats:
     >>> add_integer(100.3, -2)
     98
+    >>> add_integer(2.9, 3.1)
+    5
 
-Test error handling:
+Test default argument for b:
+    >>> add_integer(2)
+    100
+
+Test missing arguments:
+    >>> add_integer()
+    Traceback (most recent call last):
+    TypeError: add_integer() missing 1 required positional argument: 'a'
+
+Test type checking for a:
+    >>> add_integer("Hello", 4)
+    Traceback (most recent call last):
+    TypeError: a must be an integer
+
+Test type checking for b:
     >>> add_integer(4, "School")
     Traceback (most recent call last):
     TypeError: b must be an integer
+
+Test with None values:
+    >>> add_integer(None, 4)
+    Traceback (most recent call last):
+    TypeError: a must be an integer
+    >>> add_integer(4, None)
+    Traceback (most recent call last):
+    TypeError: b must be an integer
+
+Test with NaN:
+    >>> add_integer(float('nan'), 4)
+    Traceback (most recent call last):
+    TypeError: a must be an integer
+
+Test with Infinity:
+    >>> add_integer(float('inf'), 4)
+    Traceback (most recent call last):
+    TypeError: a must be an integer
