@@ -1,5 +1,5 @@
 The ``5-text_indentation`` module
-==================================
+=================================
 
 Using ``text_indentation``
 --------------------------
@@ -15,3 +15,21 @@ Test normal behavior:
     <BLANKLINE>
     Python:
     <BLANKLINE>
+
+Test text with spaces around punctuation:
+    >>> text_indentation("  Holberton.  School?   Nice   ")
+      Holberton.
+    <BLANKLINE>
+    School?
+    <BLANKLINE>
+    Nice   
+
+Test error handling for non-string input:
+    >>> text_indentation(12345)
+    Traceback (most recent call last):
+    TypeError: text must be a string
+
+Test missing argument error:
+    >>> text_indentation()
+    Traceback (most recent call last):
+    TypeError: text_indentation() missing 1 required positional argument: 'text'
