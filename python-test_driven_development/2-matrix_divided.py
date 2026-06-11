@@ -18,6 +18,8 @@ def matrix_divided(matrix, div):
     Returns:
         A new matrix with elements divided by div, rounded to 2 decimal places.
     """
+    import math
+
     msg = "matrix must be a matrix (list of lists) of integers/floats"
     if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError(msg)
@@ -26,7 +28,7 @@ def matrix_divided(matrix, div):
         if not isinstance(row, list) or len(row) == 0:
             raise TypeError(msg)
         for num in row:
-            if not isinstance(num, (int, float)):
+            if not isinstance(num, (int, float)) or math.isnan(num) or math.isinf(num):
                 raise TypeError(msg)
 
     row_len = len(matrix[0])
@@ -35,6 +37,9 @@ def matrix_divided(matrix, div):
             raise TypeError("Each row of the matrix must have the same size")
 
     if not isinstance(div, (int, float)):
+        raise TypeError("div must be a number")
+
+    if math.isnan(div) or math.isinf(div):
         raise TypeError("div must be a number")
 
     if div == 0:
