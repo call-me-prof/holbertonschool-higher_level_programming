@@ -3,7 +3,7 @@
 
 
 def text_indentation(text):
-    """Prints a text with 2 new lines after each of these characters: ., ? and :
+    """Prints a text with 2 new lines after each of these chars: ., ? and :
 
     Args:
         text: The string to be formatted.
@@ -14,7 +14,6 @@ def text_indentation(text):
     if not isinstance(text, str):
         raise TypeError("text must be a string")
 
-    # حلقة ذكية لطباعة النص والتخلص من المسافات التي تأتي بعد العلامات مباشرة
     flag = 0
     for char in text:
         if flag == 1:
