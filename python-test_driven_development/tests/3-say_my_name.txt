@@ -11,10 +11,19 @@ Test normal behavior:
     >>> say_my_name("John", "Smith")
     My name is John Smith
 
+    >>> say_my_name("Walter", "White")
+    My name is Walter White
+
+Test with only first name:
     >>> say_my_name("Bob")
     My name is Bob 
 
-Test error handling:
+Test error handling for first_name:
     >>> say_my_name(12, "White")
     Traceback (most recent call last):
     TypeError: first_name must be a string
+
+Test error handling for last_name:
+    >>> say_my_name("Walter", 12)
+    Traceback (most recent call last):
+    TypeError: last_name must be a string
