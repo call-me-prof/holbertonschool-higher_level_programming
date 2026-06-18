@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Defines a Rectangle with customizable printing symbol."""
+"""Defines a Rectangle class."""
 
 
 class Rectangle:
@@ -16,7 +16,7 @@ class Rectangle:
 
     @property
     def width(self):
-        """Get/set the width."""
+        """Get/set the width of the rectangle."""
         return self.__width
 
     @width.setter
@@ -29,7 +29,7 @@ class Rectangle:
 
     @property
     def height(self):
-        """Get/set the height."""
+        """Get/set the height of the rectangle."""
         return self.__height
 
     @height.setter
@@ -41,17 +41,17 @@ class Rectangle:
         self.__height = value
 
     def area(self):
-        """Return the area."""
+        """Return the area of the rectangle."""
         return self.__width * self.__height
 
     def perimeter(self):
-        """Return the perimeter."""
+        """Return the perimeter of the rectangle."""
         if self.__width == 0 or self.__height == 0:
             return 0
         return 2 * (self.__width + self.__height)
 
     def __str__(self):
-        """Return the printable representation using print_symbol."""
+        """Return the printable representation of the Rectangle."""
         if self.__width == 0 or self.__height == 0:
             return ""
         symbol_str = str(self.print_symbol)
@@ -59,10 +59,10 @@ class Rectangle:
         return "\n".join(rect_lines)
 
     def __repr__(self):
-        """Return the reproduction string."""
+        """Return a string representation to recreate the instance."""
         return "Rectangle({}, {})".format(self.__width, self.__height)
 
     def __del__(self):
-        """Decrement counter and print a message upon deletion."""
+        """Print a message when an instance is deleted."""
         Rectangle.number_of_instances -= 1
         print("Bye rectangle...")

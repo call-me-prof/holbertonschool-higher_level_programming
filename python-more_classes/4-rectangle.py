@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Defines a Rectangle with __str__ and __repr__ string representations."""
+"""Defines a Rectangle class."""
 
 
 class Rectangle:
@@ -12,7 +12,7 @@ class Rectangle:
 
     @property
     def width(self):
-        """Get/set the width."""
+        """Get/set the width of the rectangle."""
         return self.__width
 
     @width.setter
@@ -25,7 +25,7 @@ class Rectangle:
 
     @property
     def height(self):
-        """Get/set the height."""
+        """Get/set the height of the rectangle."""
         return self.__height
 
     @height.setter
@@ -37,17 +37,17 @@ class Rectangle:
         self.__height = value
 
     def area(self):
-        """Return the area."""
+        """Return the area of the rectangle."""
         return self.__width * self.__height
 
     def perimeter(self):
-        """Return the perimeter."""
+        """Return the perimeter of the rectangle."""
         if self.__width == 0 or self.__height == 0:
             return 0
         return 2 * (self.__width + self.__height)
 
     def __str__(self):
-        """Return a printable representation with # character."""
+        """Return the printable representation of the Rectangle."""
         if self.__width == 0 or self.__height == 0:
             return ""
         rect_lines = ["#" * self.__width for _ in range(self.__height)]
