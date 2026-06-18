@@ -55,4 +55,4 @@ class Rectangle:
 
     def __repr__(self):
         """Return a string representation to recreate the instance."""
-        return "Rectangle({}, {})".format(self.__width, self.__height)
+        return "Rectangle({}, {})".format(self.__width, self.__height):set nobomb
