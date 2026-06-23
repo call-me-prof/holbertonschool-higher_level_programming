@@ -42,5 +42,8 @@ class Rectangle(Shape):
 
 def shape_info(shape):
     """Print shape info."""
-    print("Area: {}".format(shape.area()))
-    print("Perimeter: {}".format(shape.perimeter()))
+    try:
+        print("Area: {}".format(shape.area()))
+        print("Perimeter: {}".format(shape.perimeter()))
+    except AttributeError:
+        pass
