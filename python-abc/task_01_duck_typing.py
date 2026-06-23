@@ -6,6 +6,7 @@ import math
 
 class Shape(ABC):
     """Abstract class Shape."""
+
     @abstractmethod
     def area(self):
         pass
@@ -17,11 +18,12 @@ class Shape(ABC):
 
 class Circle(Shape):
     """Circle class."""
+
     def __init__(self, radius):
         self.radius = radius
 
     def area(self):
-        return math.pi * (self.radius ** 2)
+        return math.pi * self.radius * self.radius
 
     def perimeter(self):
         return 2 * math.pi * self.radius
@@ -29,6 +31,7 @@ class Circle(Shape):
 
 class Rectangle(Shape):
     """Rectangle class."""
+
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -42,8 +45,5 @@ class Rectangle(Shape):
 
 def shape_info(shape):
     """Print shape info."""
-    try:
-        print("Area: {}".format(shape.area()))
-        print("Perimeter: {}".format(shape.perimeter()))
-    except AttributeError:
-        pass
+    print("Area: {}".format(shape.area()))
+    print("Perimeter: {}".format(shape.perimeter()))
