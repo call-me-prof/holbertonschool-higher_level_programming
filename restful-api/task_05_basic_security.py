@@ -1,61 +1,109 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+"""
+API Security and Authentication Techniques Task
+Implements Basic Authentication and JWT Authentication using Flask.
+"""
 from flask import Flask, jsonify, request
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-
-app = Flask(__name__)
-
-# Setup Rate Limiting using the client's IP address
-limiter = Limiter(
-    get_remote_address,
-    app=app,
-    default_limits=["5 per minute"]
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_httpauth import HTTPBasicAuth
+from flask_jwt_extended import (
+    JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
 
-# Hardcoded users dictionary for Basic Authentication
+app = Flask(__name__)
+# Secret key for JWT token generation and validation
+app.config['JWT_SECRET_KEY'] = 'super-secret-key-change-this-in-production'
+jwt = JWTManager(app)
+auth = HTTPBasicAuth()
+
+# In-memory user data storage with hashed passwords
 users = {
-    "user1": {"username": "user1", "password": "password1", "role": "user"},
-    "admin": {"username": "admin", "password": "secretpassword", "role": "admin"}
+    "user1": {
+        "username": "user1",
+        "password": generate_password_hash("password"),
+        "role": "user"
+    },
+    "admin1": {
+        "username": "admin1",
+        "password": generate_password_hash("password"),
+        "role": "admin"
+    }
 }
 
-# Helper function to validate Basic Auth headers
-def check_auth(username, password):
-    user = users.get(username)
-    if user and user['password'] == password:
-        return user
+# Basic Authentication password verification callback
+@auth.verify_password
+def verify_password(username, password):
+    if username in users and check_password_hash(users[username]["password"], password):
+        return username
     return None
 
-# Route: Protected Route using Basic Authentication
-@app.route('/basic-protected')
+# Protected Route using Basic Authentication
+@app.route('/basic-protected', methods=['GET'])
+@auth.login_required
 def basic_protected():
-    auth = request.authorization
-    if not auth or not check_auth(auth.username, auth.password):
-        return jsonify({"error": "Unauthorized"}), 401
-        
-    return jsonify({"message": "Basic Auth Successful"})
+    return "Basic Auth: Access Granted"
 
-# Route: Protected Route using API Key Authentication
-@app.route('/api-key-protected')
-def api_key_protected():
-    # Retrieve API key from custom header 'X-API-Key'
-    api_key = request.headers.get('X-API-Key')
+# Login Route to generate and return a JWT token
+@app.route('/login', methods=['POST'])
+def login():
+    if not request.is_json:
+        return jsonify({"error": "Missing JSON in request"}), 400
+
+    username = request.json.get('username', None)
+    password = request.json.get('password', None)
+
+    if not username or not password:
+        return jsonify({"error": "Missing username or password"}), 400
+
+    if username not in users or not check_password_hash(users[username]["password"], password):
+        return jsonify({"error": "Bad username or password"}), 401
+
+    # Embed user role within the JWT token payload
+    additional_claims = {"role": users[username]["role"]}
+    access_token = create_access_token(identity=username, additional_claims=additional_claims)
+    return jsonify(access_token=access_token)
+
+# Protected Route using JWT Authentication
+@app.route('/jwt-protected', methods=['GET'])
+@jwt_required()
+def jwt_protected():
+    return "JWT Auth: Access Granted"
+
+# Role-based Protected Route (Admin only)
+@app.route('/admin-only', methods=['GET'])
+@jwt_required()
+def admin_only():
+    current_user = get_jwt_identity()
     
-    # Expected API key for validation
-    if api_key != "secret-api-key":
-        return jsonify({"error": "Unauthorized"}), 401
+    # Retrieve additional claims to check the user's role
+    from flask_jwt_extended import get_jwt
+    claims = get_jwt()
+    
+    if claims.get('role') != 'admin':
+        return jsonify({"error": "Admin access required"}), 403
         
-    return jsonify({"message": "API Key Auth Successful"})
+    return "Admin Access: Granted"
 
-# Route: Rate-limited route allowing only 5 requests per minute
-@app.route('/limited-route')
-@limiter.limit("5 per minute")
-def limited_route():
-    return jsonify({"message": "Request successful"})
+# Custom JWT Error Handlers
+@jwt.unauthorized_loader
+def handle_unauthorized_error(err):
+    return jsonify({"error": "Missing or invalid token"}), 401
 
-# Custom error handler for Rate Limit Exceeded (429 Too Many Requests)
-@app.errorhandler(429)
-def ratelimit_handler(e):
-    return jsonify({"error": "Too many requests"}), 429
+@jwt.invalid_token_loader
+def handle_invalid_token_error(err):
+    return jsonify({"error": "Invalid token"}), 401
+
+@jwt.expired_token_loader
+def handle_expired_token_error(jwt_header, jwt_payload):
+    return jsonify({"error": "Token has expired"}), 401
+
+@jwt.revoked_token_loader
+def handle_revoked_token_error(jwt_header, jwt_payload):
+    return jsonify({"error": "Token has been revoked"}), 401
+
+@jwt.needs_fresh_token_loader
+def handle_needs_fresh_token_error(jwt_header, jwt_payload):
+    return jsonify({"error": "Fresh token required"}), 401
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
