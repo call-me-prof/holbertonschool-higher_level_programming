@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
-Displays all values in the states table of hbtn_0e_0_usa
-where name matches the argument, safe from MySQL injections
+Displays all values in states table safe from MySQL injections
 """
 import sys
 import MySQLdb
@@ -15,7 +14,10 @@ if __name__ == "__main__":
         db=sys.argv[3]
     )
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM states WHERE name = %s ORDER BY id ASC", (sys.argv[4],))
+    cursor.execute(
+        "SELECT * FROM states WHERE name = %s ORDER BY states.id ASC",
+        (sys.argv[4],)
+    )
     rows = cursor.fetchall()
     for row in rows:
         print(row)
