@@ -1,3 +1,4 @@
+#!/usr/bin/node
 const count = process.argv.length - 2;
 
 if (count === 0) {
